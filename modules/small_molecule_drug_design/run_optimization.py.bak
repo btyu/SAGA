@@ -1,0 +1,566 @@
+#!/usr/bin/env python3
+"""
+Simple script for running molecular optimization with UniDock scoring functions.
+"""
+
+import argparse
+import logging
+import sys
+import warnings
+import os
+from typing import List
+from datetime import datetime
+
+import os
+
+module_dir = os.path.dirname(os.path.abspath(__file__))
+base_dir = os.path.dirname(module_dir)  # modules/
+grand_dir = os.path.dirname(base_dir)  # SciLeiAgent
+print(grand_dir)
+import sys
+
+sys.path.insert(0, grand_dir)
+sys.path.insert(0, grand_dir + "/scileo_agent")
+
+from scileo_agent.core.config import LLMConfig
+from scileo_agent.core.data_models import Objective
+from scileo_agent.core.registry import get_scorer
+from modules.small_molecule_drug_design.llm_sbdd_optimizer import LLMSBDDOptimizer
+from modules.small_molecule_drug_design.scorer.unidock_scorer import UniDockScorers
+from modules.small_molecule_drug_design.scorer.druglikeness_scorer import DruglikenessScorers
+from modules.small_molecule_drug_design.scorer.ra_scorer import RAScorers
+# Import module to trigger scorer registration on import
+import modules.small_molecule_drug_design.scorer.antibiotics_scorer  # noqa: F401
+from modules.small_molecule_drug_design.scorer.unidock_scorer import UniDockScorers  # noqa: F401
+from modules.small_molecule_drug_design.ga_logging import GALogger, ChemistLogger
+from modules.small_molecule_drug_design.utils.rdkit_utils import calculate_population_diversity, calculate_tanimoto_similarity
+from modules.small_molecule_drug_design.postprocessing.aggregate_selection import (
+    aggregate_and_select_folder, )
+
+
+def configure_logging():
+    """Configure logging to reduce noisy INFO messages and suppress warnings."""
+    # Set root logger to WARNING
+    logging.getLogger().setLevel(logging.WARNING)
+
+    # Specifically quiet these noisy loggers
+    noisy_loggers = [
+        "LiteLLM", "litellm", "openai", "httpx", "httpcore", "MDAnalysis",
+        "MDAnalysis.coordinates", "MDAnalysis.topology", "MDAnalysis.universe",
+        "MDAnalysis.topology.base"
+    ]
+
+    for logger_name in noisy_loggers:
+        logging.getLogger(logger_name).setLevel(logging.ERROR)
+
+    # Suppress specific MDAnalysis warnings
+    warnings.filterwarnings("ignore",
+                            message="Unit cell dimensions not found.*")
+    warnings.filterwarnings("ignore",
+                            message="Found no information for attr.*")
+    warnings.filterwarnings("ignore", message=".*CRYST1 record.*")
+
+
+# Available scoring functions
+AVAILABLE_TARGETS = {
+    'ampcclean': 'ampcclean_unidock',
+    'muopioidclean': 'muopioidclean_unidock',
+    'mpro': 'mpro_unidock',
+    'mars1': 'mars1_unidock',
+    'qed': 'qed',
+    'logp': 'logp_score',
+    'deepdl': 'deepdl_druglikeness',
+    'toxicity': 'primary_1_minus_cell_toxicity_chemprop',
+    'staph_aureus': 'staph_aureus_chemprop',
+    'pains': 'pains_filter',
+    'brenk': 'brenk_filter',
+    'ra': 'ra_score_xgb',
+    'antibiotics_novelty': 'antibiotics_novelty',
+    'mpro_his161_a':'mpro_his161_a',
+    'mpro_glu164_a':'mpro_glu164_a',
+    'mpro_his39_a':'mpro_his39_a'
+}
+
+
+def create_optimizer(config: dict = None, init_group=None) -> LLMSBDDOptimizer:
+    """Create and configure the optimizer."""
+    default_config = {
+        "population_size": 120,
+        "offspring_size": 70,
+        "mutation_size": 30,
+        "oracle_budget": 10000,
+        "seed": 42
+    }
+
+    if config:
+        default_config.update(config)
+
+    # LLM configuration
+    llm_config = LLMConfig(provider="openai", model="gpt-4o")
+    return LLMSBDDOptimizer(module_id="llm_sbdd_optimizer",
+                            config=default_config,
+                            llm_config=llm_config,
+                            init_group=init_group)
+
+
+def create_objective(target: str) -> Objective:
+    """Create optimization objective for the specified target."""
+    scorer = get_scorer(AVAILABLE_TARGETS[target])
+
+    objective = Objective(
+        name=scorer._scorer_name,
+        description=scorer._scorer_metadata['description'],
+        optimization_direction="maximize",
+        population_wise=scorer._scorer_metadata['population_wise'],
+        scorer=scorer)
+
+    return objective
+
+
+def main():
+    # Configure logging early to reduce noise
+    configure_logging()
+
+    parser = argparse.ArgumentParser(
+        description="Run molecular optimization with UniDock scoring",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=f"""
+Available targets:
+  {', '.join(AVAILABLE_TARGETS.keys())}
+
+Example usage:
+  python run_optimization.py --target drd2 --budget 200
+  python run_optimization.py --target brd4 --population-size 50 --budget 500
+  python run_optimization.py --targets drd2 qed logp --budget 500  # Multi-objective
+  python run_optimization.py --target drd2 --debug  # Quick test with small parameters
+  python run_optimization.py --target drd2 --output-dir results/  # Custom output directory
+  python run_optimization.py --target mpro --add-3d-docked-pose-info # Adds 3D docked pose info to LLM prompts if available
+        """)
+
+    # Single target (backward compatible)
+    parser.add_argument(
+        "--target",
+        choices=list(AVAILABLE_TARGETS.keys()),
+        help=
+        "Single target for optimization (use --targets for multi-objective)")
+    # Multi-objective: space-separated list of targets
+    parser.add_argument(
+        "--targets",
+        nargs='+',
+        choices=list(AVAILABLE_TARGETS.keys()),
+        help="Space-separated targets for multi-objective optimization")
+
+    parser.add_argument(
+        "--budget",
+        type=int,
+        default=10000,
+        help="Oracle budget (number of evaluations) (default: 10000)")
+
+    parser.add_argument("--population-size",
+                        type=int,
+                        default=120,
+                        help="Population size (default: 120)")
+
+    parser.add_argument(
+        "--offspring-size",
+        type=int,
+        default=70,
+        help="Number of offspring per generation (default: 70)")
+
+    parser.add_argument(
+        "--mutation-size",
+        type=int,
+        default=30,
+        help="Number of mutations per generation (default: 30)")
+
+    parser.add_argument("--seed",
+                        type=int,
+                        default=42,
+                        help="Random seed (default: 42)")
+
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Enable debug mode with smaller population/budget for testing")
+
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default="logs",
+        help="Output directory for logs and plots (default: logs)")
+
+    parser.add_argument(
+        "--name",
+        dest="experiment_name",
+        type=str,
+        help=
+        "Optional custom experiment name for the subfolder; date (YYYYMMDD_HHMMSS) will be appended"
+    )
+
+    # Optional weights for multi-objective runs
+    parser.add_argument(
+        "--weights",
+        type=str,
+        help=
+        "Comma-separated weights corresponding to the order of --targets (optional)"
+    )
+
+    parser.add_argument(
+        "--survival-selection-method",
+        type=str,
+        choices=["fitness", "diverse_top", "butina_cluster"],
+        default="fitness",
+        help=
+        "Survivor selection method: fitness (default), diverse_top, or butina_cluster",
+    )
+
+    # Elitism controls
+    elitism_group = parser.add_mutually_exclusive_group()
+    elitism_group.add_argument(
+        "--elitism-fraction",
+        type=float,
+        help=
+        "Fraction of current population carried over as elites (0-1). Defaults to 0.10 in the optimizer",
+    )
+    elitism_group.add_argument(
+        "--no-elitism",
+        action="store_true",
+        help="Disable elitism (equivalent to --elitism-fraction 0.0)",
+    )
+
+    # Objective combiner selection
+    parser.add_argument(
+        "--combiner",
+        type=str,
+        default="simple_sum",
+        choices=[
+            "simple_sum", "weighted_sum", "antibiotic_geomean", "covid_simple"
+        ],
+        help=
+        "Objective combiner for multi-objective aggregation (default: simple_sum)",
+=======
+>>>>>>> main
+    )
+
+    parser.add_argument(
+        "--init_group",
+        type=str,
+        default="diverse_10k",
+        help=
+        "Initial pool: zinc | diverse_10k | enamine | enamine_top500 | covid | @/abs/path/to/file.smi",
+    )
+
+    parser.add_argument("--enable-structure-filter",
+                        action="store_true",
+                        help="Enable structure filtering during optimization")
+
+    # Early stopping: enabled by default; disable with flag
+    early_group = parser.add_mutually_exclusive_group()
+    early_group.add_argument("--early-stopping",
+                             dest="enable_early_stopping",
+                             action="store_true",
+                             help="Enable early stopping (default)")
+    early_group.add_argument("--no-early-stopping",
+                             dest="enable_early_stopping",
+                             action="store_false",
+                             help="Disable early stopping")
+    parser.set_defaults(enable_early_stopping=True)
+
+    # Optional postprocessing: aggregate and select after optimization
+    parser.add_argument(
+        "--post-aggregate",
+        action="store_true",
+        default=True,
+        help=
+        "After optimization completes, aggregate CSV logs in the experiment folder and select top-diverse",
+    )
+    parser.add_argument(
+        "--post-aggregate-pattern",
+        type=str,
+        default="**/*selected.csv",
+        help="Glob pattern within experiment folder for CSVs to include",
+    )
+    parser.add_argument(
+        "--post-k",
+        type=int,
+        default=10000,
+        help="Number of molecules to select in post-aggregation",
+    )
+    parser.add_argument(
+        "--post-tanimoto-threshold",
+        type=float,
+        default=0.4,
+        help="Tanimoto threshold for post-aggregation selection",
+    )
+    parser.add_argument(
+        "--post-leniency",
+        type=int,
+        default=0,
+        help="Leniency for post-aggregation selection",
+    )
+    parser.add_argument(
+        "--add-3d-docked-pose-info",
+        action="store_true",
+        default=False,
+        help="Adds the 3d docked pose information and residue maps to the LLM prompts for crossover and mutation, if available in candidate metadata.",
+    )
+
+    args = parser.parse_args()
+
+    # Override parameters for debug mode
+    if args.debug:
+        print("🔧 DEBUG MODE ENABLED - Using smaller parameters for testing")
+        args.budget = min(args.budget, 20)
+        args.population_size = min(args.population_size, 5)
+        args.offspring_size = min(args.offspring_size, 5)
+        args.mutation_size = min(args.mutation_size, 5)
+
+    # No normalization here; handled uniformly inside optimizer (_sample_smiles)
+
+    # No selection-only branch here anymore. Selection lives in a dedicated script.
+
+    print("=" * 60)
+    print("         MOLECULAR OPTIMIZATION")
+    if args.debug:
+        print("              (DEBUG MODE)")
+    print("=" * 60)
+    selected_targets = args.targets if args.targets else (
+        [args.target] if args.target else [])
+    if not selected_targets:
+        raise ValueError("You must specify either --target or --targets")
+    if len(selected_targets) == 1:
+        print(
+            f"Target: {selected_targets[0].upper()} ({AVAILABLE_TARGETS[selected_targets[0]]})"
+        )
+    else:
+        readable = ", ".join(f"{t.upper()} ({AVAILABLE_TARGETS[t]})"
+                             for t in selected_targets)
+        print(f"Targets: {readable}")
+    print(
+        f"Budget: {args.budget} evaluations{' (debug)' if args.debug else ''}")
+    print(
+        f"Population size: {args.population_size}{' (debug)' if args.debug else ''}"
+    )
+    print(
+        f"Offspring size: {args.offspring_size}{' (debug)' if args.debug else ''}"
+    )
+    print(
+        f"Mutation size: {args.mutation_size}{' (debug)' if args.debug else ''}"
+    )
+    print(f"Seed: {args.seed}")
+    print("=" * 60)
+
+    # Create optimizer
+    config = {
+        "population_size": args.population_size,
+        "offspring_size": args.offspring_size,
+        "mutation_size": args.mutation_size,
+        "oracle_budget": args.budget,
+        "seed": args.seed,
+        "survival_selection_method": args.survival_selection_method,
+        "objective_combiner": args.combiner,
+        "enable_structure_filter": args.enable_structure_filter,
+        "enable_early_stopping": args.enable_early_stopping,
+        "add_3d_docked_pose_info": args.add_3d_docked_pose_info,
+    }
+
+    # Apply elitism config if specified
+    if args.no_elitism:
+        config["elitism_fraction"] = 0.0
+    elif args.elitism_fraction is not None:
+        config["elitism_fraction"] = args.elitism_fraction
+
+    print("\nInitializing optimizer...")
+    optimizer = create_optimizer(config, init_group=args.init_group)
+
+    # Create objectives
+    if len(selected_targets) == 1:
+        print(f"Setting up {selected_targets[0].upper()} objective...")
+    else:
+        print(
+            f"Setting up multi-objective: {', '.join(t.upper() for t in selected_targets)}"
+        )
+    objectives: List[Objective] = [
+        create_objective(t) for t in selected_targets
+    ]
+
+    # Optional manual weights
+    if args.weights:
+        weights = [
+            float(w) for w in args.weights.split(',') if w.strip() != ''
+        ]
+        if len(weights) != len(objectives):
+            raise ValueError(
+                "Number of --weights must match number of objectives")
+        optimizer.set_objectives_weights(weights)
+        print(f"Objective weights: {weights}")
+
+    # Validate objectives
+    optimizer.check_objectives(objectives)
+    print("✓ Objective validation passed")
+
+    # Create experiment-specific output directory with timestamp
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    target_stub = "_".join(selected_targets)
+    # Build experiment name (name first, then date). If custom name provided, use it; otherwise include targets and seed
+    base_name = (args.experiment_name if args.experiment_name else
+                 f"{target_stub}_scileo_seed{args.seed}")
+    experiment_name = f"{base_name}_{timestamp}"
+    if args.debug:
+        experiment_name = f"debug_{experiment_name}"
+
+    experiment_dir = os.path.join(args.output_dir, experiment_name)
+    os.makedirs(experiment_dir, exist_ok=True)
+
+    # Create logger for this optimization run
+    print("Initializing logger...")
+    logger = GALogger(objectives=objectives,
+                      store_top_k=50,
+                      experiment_name=experiment_name,
+                      output_dir=experiment_dir)
+    print("✓ Logger initialized")
+    # Optional human-friendly logger
+    human_logger = ChemistLogger(
+        experiment_name=experiment_name,
+        output_dir=experiment_dir,
+        max_examples_per_generation=3,
+    )
+    # Persist objectives metadata and run config for human report/index
+    try:
+        human_logger.set_objectives_info(objectives,
+                                         weights if args.weights else None)
+        human_logger.set_run_context(config)
+    except Exception:
+        pass
+
+    # Run optimization
+    print("\nStarting optimization...")
+    print("-" * 40)
+
+    # No initial population - let optimizer create one
+    optimized_population = optimizer.optimize(current_population=None,
+                                              objectives=objectives,
+                                              logger=logger,
+                                              human_logger=human_logger)
+
+    print("-" * 40)
+    print("Optimization completed!")
+
+    # Generate and display optimization summary
+    print("\n" + "=" * 60)
+    print("OPTIMIZATION SUMMARY")
+    print("=" * 60)
+
+    report = logger.get_summary_report()
+    print(f"Experiment: {report['experiment_name']}")
+    print(f"Total generations: {report['total_generations']}")
+    print(f"Total evaluations: {report['total_evaluations']}")
+
+    for t in selected_targets:
+        obj_name = AVAILABLE_TARGETS[t]
+        if obj_name in report['final_statistics']:
+            final_stats = report['final_statistics'][obj_name]
+            print(f"\n{obj_name.upper()} Final Statistics:")
+            print(f"  Mean Score: {final_stats['mean']:.4f}")
+            print(f"  Best Score: {final_stats['top1']:.4f}")
+            print(f"  Top-10 Average: {final_stats['top10_mean']:.4f}")
+
+        if obj_name in report['improvement']:
+            improvement = report['improvement'][obj_name]
+            print(f"\nImprovement from Initial ({obj_name}):")
+            print(f"  Initial mean: {improvement['initial_mean']:.4f}")
+            print(f"  Final mean: {improvement['final_mean']:.4f}")
+            print(
+                f"  Absolute improvement: {improvement['absolute_improvement']:.4f}"
+            )
+            print(
+                f"  Relative improvement: {improvement['relative_improvement']:.2f}%"
+            )
+
+    # Display top results
+    print(f"\nTop 5 molecules:")
+    for i, candidate in enumerate(optimized_population.candidates[:5]):
+        if len(objectives) == 1:
+            score = candidate.scores.get(
+                AVAILABLE_TARGETS[selected_targets[0]], "N/A")
+            print(
+                f"  {i+1}. {candidate.representation[:50]}... (score: {score})"
+            )
+        else:
+            agg = candidate.scores.get("multiobj_score", "N/A")
+            print(
+                f"  {i+1}. {candidate.representation[:50]}... (multiobj_score: {agg})"
+            )
+
+    print(f"\nBest molecule:")
+    best = optimized_population.candidates[0]
+    if len(objectives) == 1:
+        best_score = best.scores.get(AVAILABLE_TARGETS[selected_targets[0]],
+                                     "N/A")
+        print(f"  SMILES: {best.representation}")
+        print(f"  Score: {best_score}")
+    else:
+        best_agg = best.scores.get("multiobj_score", "N/A")
+        print(f"  SMILES: {best.representation}")
+        print(f"  Multi-objective score: {best_agg}")
+
+    # Compute and print Tanimoto similarity between best molecule and the most similar molecule in the initial population
+    try:
+        initial_population = optimizer.initial_population
+        print(f"Initial population size: {len(initial_population.candidates)}")
+        most_similar_molecule = max(
+            initial_population.candidates,
+            key=lambda x: calculate_tanimoto_similarity(
+                x.representation, best.representation))
+        print(f"Most similar molecule: {most_similar_molecule.representation}")
+        print(
+            f"Tanimoto similarity: {calculate_tanimoto_similarity(best.representation, most_similar_molecule.representation)}"
+        )
+    except Exception as e:
+        print(f"Warning: Could not compute Tanimoto similarity: {e}")
+
+    # Final diversity of selected population
+    try:
+        final_div = calculate_population_diversity(
+            [c.representation for c in optimized_population.candidates])
+        print(
+            f"\nFinal internal diversity: {final_div:.4f} (mean Tanimoto: {1.0 - final_div:.4f})"
+        )
+    except Exception as e:
+        print(f"\nWarning: Could not compute final diversity: {e}")
+
+    # End-of-run plots are omitted; rely on GALogger incremental saves
+
+    # Optional post-aggregation of generated CSVs in the experiment folder
+    if args.post_aggregate:
+        try:
+            out_csv, total_loaded, selected = aggregate_and_select_folder(
+                input_dir=experiment_dir,
+                pattern=args.post_aggregate_pattern,
+                smiles_column="smiles",
+                score_column="aggregate",
+                k=args.post_k,
+                tanimoto_threshold=args.post_tanimoto_threshold,
+                leniency=args.post_leniency,
+                output_path=None,
+            )
+            print("\n" + "=" * 60)
+            print("POST-AGGREGATION (DIVERSE TOP-K)")
+            print("=" * 60)
+            print(f"Folder: {experiment_dir}")
+            print(f"Pattern: {args.post_aggregate_pattern}")
+            print(f"Unique molecules loaded: {total_loaded}")
+            print(f"Selected molecules: {selected}")
+            print(f"Saved to: {out_csv}")
+        except Exception as e:
+            print(f"Warning: Post-aggregation failed: {e}")
+
+    # Reminder of where everything was saved
+    print(f"\nOutputs directory: {experiment_dir}")
+
+
+if __name__ == "__main__":
+    main()
+
+if __name__ == "__main__":
+    main()

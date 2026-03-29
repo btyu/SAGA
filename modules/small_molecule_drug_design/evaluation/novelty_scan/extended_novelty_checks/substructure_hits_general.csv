@@ -1,0 +1,11 @@
+name,class,smiles
+cefdinir,cephalosporin,C=CC1=C(C(=O)O)N2C(=O)[C@@H](N=C(O)/C(=N\O)c3csc(=N)[nH]3)[C@H]2SC1
+cefpodoxime,cephalosporin,COCC1=C(C(=O)O)N2C(=O)[C@@H](N=C(O)/C(=N\OC)c3csc(=N)[nH]3)[C@H]2SC1
+cefixime,cephalosporin,C=CC1=C(C(=O)O)N2C(=O)[C@@H](N=C(O)/C(=N\OCC(=O)O)c3csc(=N)[nH]3)[C@H]2SC1
+ceftazidime,cephalosporin,CC(C)(O/N=C(\C(O)=N[C@@H]1C(=O)N2C(C(=O)O)=C(C[n+]3ccccc3)CS[C@H]12)c1csc(=N)[nH]1)C(=O)[O-]
+ceftriaxone,cephalosporin,CO/N=C(\C(O)=N[C@@H]1C(=O)N2C(C(=O)O)=C(CSc3nc(=O)c(=O)[nH]n3C)CS[C@H]12)c1csc(=N)[nH]1
+cefepime,cephalosporin,CO/N=C(\C(O)=N[C@@H]1C(=O)N2C(C(=O)[O-])=C(C[N+]3(C)CCCC3)CS[C@H]12)c1csc(=N)[nH]1
+ceftaroline,cephalosporin,CCO/N=C(\C(O)=N[C@@H]1C(=O)N2C(C(=O)O)=C(Sc3nc(-c4cc[n+](C)cc4)cs3)CS[C@H]12)c1nc(=NP(=O)([O-])O)s[nH]1
+ceftaroline,cephalosporin,CCO/N=C(\C(O)=N[C@@H]1C(=O)N2C(C(=O)[O-])=C(Sc3nc(-c4cc[n+](C)cc4)cs3)CS[C@H]12)c1nc(=N)s[nH]1
+aztreonam,other,C[C@H]1[C@H](N=C(O)/C(=N\OC(C)(C)C(=O)O)c2csc(=N)[nH]2)C(=O)N1S(=O)(=O)O
+sulfathiazole,sulfonamide,Nc1ccc(S(=O)(=O)Nc2nccs2)cc1

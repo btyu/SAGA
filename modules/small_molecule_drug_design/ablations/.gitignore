@@ -1,0 +1,20 @@
+# Ignore generated evaluation results
+evaluation_type1_results/
+evaluation_type2_results/
+type1_results/
+type2_results/
+
+# Ignore past archives
+past/
+
+# Ignore temporary analysis scripts
+add_*.py
+scileo_ablations/add_*.py
+evaluation_*_v*.py
+
+# Ignore log files
+*.log
+
+# Keep the main evaluation scripts
+!evaluation_type1.py
+!evaluation_type2.py

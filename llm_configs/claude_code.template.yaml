@@ -1,0 +1,14 @@
+claude_code/claude-sonnet-4-5-20250929:
+  provider: claude_code  # Use your Claude Pro or Max account
+  model: claude-sonnet-4-5-20250929
+  credentials: claude_code
+
+anthropic/claude-sonnet-4-5-20250929:
+  provider: anthropic
+  model: claude-sonnet-4-5-20250929
+  credentials: anthropic
+
+bedrock/claude-sonnet-4-5-20250929:
+  provider: bedrock
+  model: global.anthropic.claude-sonnet-4-5-20250929-v1:0
+  credentials: bedrock

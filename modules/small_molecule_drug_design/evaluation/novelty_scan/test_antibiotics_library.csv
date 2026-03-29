@@ -1,0 +1,6 @@
+name,class,smiles,status
+ciprofloxacin,fluoroquinolone,O=C(O)C1=CN(C2CC2)C=C(C=1)C3=CC=C(F)C(N4CCNCC4)=C3,ok
+amoxicillin,aminopenicillin,CC1([C@@H](N2[C@H](S1)[C@@H](C2=O)NC(=O)[C@@H](C3=CC=C(O)C=C3)N)C(=O)O)C,ok
+penicillin G,penicillin,CC1([C@@H](N2[C@H](S1)[C@@H](C2=O)NC(=O)CC3=CC=CC=C3)C(=O)O)C,ok
+tetracycline,tetracycline,CN(C)C1C(O)=C(C(N)=O)C(=O)C2(O)C(O)=C3C(=O)C=C(C(C)=C3C(O)=C12)O,ok
+streptomycin,aminoglycoside,CN=C(N)NC1C(O)C(C(O)C(CO)O1)OC2C(C(C(C(O2)CO)O)O)NC(=N)N,ok

@@ -1,0 +1,43 @@
+# Instructions:
+# Add models that you want to use in this file.
+# ===== An Example =====
+# openai/gpt-4o-2024-08-06:    <- You can use any name you want for the model. Recommend using provider/model-version for clarity.
+#   provider: openai           <- The provider supported in LiteLLM (https://docs.litellm.ai/docs/providers). 
+#   model: gpt-4o-2024-08-06   <- The model name.
+#   credentials: openai        <- The corresponding credential tag that you set in credentials.yaml.
+#   __call_args:               <- Optional. Arguments to pass to the model.
+#     top_p: 0.95
+#     thinking:
+#       type: enabled
+#       budget_tokens: 20000
+# ======================
+
+# The following are the models used in our codebase.
+# You can add other models and change the model names in the experiment scripts/notebooks as needed.
+
+openai/gpt-4.1-nano-2025-04-14:
+  provider: openai
+  model: gpt-4.1-nano-2025-04-14
+  credentials: openai
+
+openai/gpt-5-mini-2025-08-07
+  provider: openai
+  model: gpt-5-mini-2025-08-07
+  credentials: openai
+
+openai/gpt-5-2025-08-07
+  provider: openai
+  model: gpt-5-2025-08-07
+  credentials: openai
+
+anthropic/claude-sonnet-4-5-20250929:
+  provider: anthropic
+  model: claude-sonnet-4-5-20250929
+  credentials: anthropic
+
+# For the same claude-sonnet-4-5-20250929, you can set it with another provider for example.
+# The model name should be set accordingly in the experiment scripts/notebooks.
+bedrock/claude-sonnet-4-5-20250929:
+  provider: bedrock
+  model: global.anthropic.claude-sonnet-4-5-20250929-v1:0
+  credentials: bedrock

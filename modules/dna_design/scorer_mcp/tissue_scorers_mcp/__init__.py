@@ -1,0 +1,34 @@
+# --- auto-generated scorers start ---
+scorers: dict = {
+    'dna_hepg2_tissue_cage_expression': {
+        'function_name': 'score_hepg2_tissue_expression',
+        'population_wise': False,
+        'description': 'HepG2 liver tissue CAGE-seq expression score (value range: -∞ to ∞). We utilized the pre-trained model Enformer and liver track for prediction. This objective measures the transcriptional activity of DNA sequences in HepG2 cells, a liver-derived cell line, using CAGE-seq (Cap Analysis of Gene Expression). Since HepG2 originates from liver tissue, sequences with liver-specific regulatory elements (such as enhancers and promoters) should show higher expression scores. This allows evaluation of whether a candidate DNA sequence has functional regulatory potential in liver-related contexts. High values indicate strong transcriptional activity in HepG2/liver tissue, suggesting that the sequence functions as a potent enhancer or promoter in hepatic regulatory programs. Low or negative values suggest weak or no detectable transcriptional initiation in HepG2 cells, implying limited or absent liver-specific regulatory activity.',
+        'tool_description': 'Score based on expression level in hepg2 cell type.\n\nReturn the Averaged CAGE-seq expression for Liver tissue, which is the source tissue of hepg2 cell type.\n\nArgs:\n    DNA sequences\nReturns:\n    List of scores (-inf,inf)',
+    },
+    'dna_k562_tissue_cage_expression': {
+        'function_name': 'score_k562_tissue_expression',
+        'population_wise': False,
+        'description': 'K562 blood tissue CAGE-seq expression score (value range: -∞ to ∞). We utilized the pre-trained model Enformer and blood track for prediction. This objective measures the transcriptional activity of DNA sequences in K562 cells, a blood-derived diseased cell line, using CAGE-seq (Cap Analysis of Gene Expression). Since K562 originates from blood tissue, sequences with blood-specific regulatory elements (such as enhancers and promoters) should show higher expression scores. This allows evaluation of whether a candidate DNA sequence has functional regulatory potential in blood-related contexts. High values indicate strong transcriptional activity in K562/blood tissue, suggesting that the sequence functions as a potent enhancer or promoter in hepatic regulatory programs. Low or negative values suggest weak or no detectable transcriptional initiation in K562 cells, implying limited or absent blood-specific regulatory activity.',
+        'tool_description': 'Score based on expression level in k562 cell type.\n\nReturn the Averaged CAGE-seq expression for Blood tissue, which is the source tissue of k562 cell type.\n\nArgs:\n    DNA sequences\nReturns:\n    List of scores (-inf,inf)',
+    },
+    'dna_sknsh_tissue_cage_expression': {
+        'function_name': 'score_SKNSH_tissue_expression',
+        'population_wise': False,
+        'description': 'SKNSH brain tissue CAGE-seq expression score (value range: -∞ to ∞). We utilized the pre-trained model Enformer and brain track for prediction. This objective measures the transcriptional activity of DNA sequences in SKNSH cells, a blood-derived diseased cell line, using CAGE-seq (Cap Analysis of Gene Expression). Since SKNSH originates from brain tissue, sequences with brain-specific regulatory elements (such as enhancers and promoters) should show higher expression scores. This allows evaluation of whether a candidate DNA sequence has functional regulatory potential in brain-related contexts. High values indicate strong transcriptional activity in SKNSH/brain tissue, suggesting that the sequence functions as a potent enhancer or promoter in hepatic regulatory programs. Low or negative values suggest weak or no detectable transcriptional initiation in SKNSH cells, implying limited or absent brain-specific regulatory activity.',
+        'tool_description': 'Score based on expression level in SKNSH cell type.\n\nReturn the Averaged CAGE-seq expression for Brain tissue, which is the source tissue of SKNSH cell type.\n\nArgs:\n    DNA sequences\nReturns:\n    List of scores (-inf,inf)',
+    },
+    'dna_a549_tissue_cage_expression': {
+        'function_name': 'score_a549_tissue_expression',
+        'population_wise': False,
+        'description': 'A549 lung tissue CAGE-seq expression score (value range: -∞ to ∞). We utilized the pre-trained model Enformer and lung track for prediction. This objective measures the transcriptional activity of DNA sequences in A549 cells, a lung-derived cell line, using CAGE-seq (Cap Analysis of Gene Expression). Since A549 originates from lung tissue, sequences with lung-specific regulatory elements (such as enhancers and promoters) should show higher expression scores. This allows evaluation of whether a candidate DNA sequence has functional regulatory potential in lung-related contexts. High values indicate strong transcriptional activity in A549/lung tissue, suggesting that the sequence functions as a potent enhancer or promoter in hepatic regulatory programs. Low or negative values suggest weak or no detectable transcriptional initiation in A549 cells, implying limited or absent lung-specific regulatory activity.',
+        'tool_description': 'Score based on expression level in A549 cell type.\n\nReturn the Averaged CAGE-seq expression for Lung tissue, which is the source tissue of A549 cell type.\n\nArgs:\n    DNA sequences\nReturns:\n    List of scores (-inf,inf)',
+    },
+    'dna_gm12878_tissue_cage_expression': {
+        'function_name': 'score_gm12878_tissue_expression',
+        'population_wise': False,
+        'description': 'GM12878 PBMC tissue CAGE-seq expression score (value range: -∞ to ∞). We utilized the pre-trained model Enformer and PBMC track for prediction. This objective measures the transcriptional activity of DNA sequences in GM12878 cells, a PBMC-derived cell line, using CAGE-seq (Cap Analysis of Gene Expression). Since GM12878 originates from PBMC tissue, sequences with PBMC-specific regulatory elements (such as enhancers and promoters) should show higher expression scores. This allows evaluation of whether a candidate DNA sequence has functional regulatory potential in PBMC-related contexts. High values indicate strong transcriptional activity in GM12878/PBMC tissue, suggesting that the sequence functions as a potent enhancer or promoter in hepatic regulatory programs. Low or negative values suggest weak or no detectable transcriptional initiation in GM12878 cells, implying limited or absent PBMC-specific regulatory activity.',
+        'tool_description': 'Score based on expression level in GM12878 cell type.\n\nReturn the Averaged CAGE-seq expression for PBMC tissue, which is the source tissue of GM12878 cell type.\n\nArgs:\n    DNA sequences\nReturns:\n    List of scores (-inf,inf)',
+    },
+}
+# --- auto-generated scorers end ---

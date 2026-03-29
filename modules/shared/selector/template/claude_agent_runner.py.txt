@@ -1,0 +1,175 @@
+import os
+import asyncio
+import pickle
+import json
+from claude_agent_sdk import ClaudeSDKClient, ClaudeAgentOptions
+
+user_prompt = os.environ['CLAUDE_USER_PROMPT']
+cwd = os.environ.get('CLAUDE_CWD', '/workspace')
+add_dirs_str = os.environ.get('CLAUDE_ADD_DIRS', '')
+add_dirs = [p for p in add_dirs_str.split('::') if p]
+model = os.environ.get('CLAUDE_MODEL', 'claude-sonnet-4-20250514')
+model_name = os.environ.get('CLAUDE_MODEL_NAME', model)
+permission_mode = os.environ.get('CLAUDE_PERMISSION_MODE', 'bypassPermissions')
+max_tokens = int(os.environ.get('CLAUDE_MAX_TOKENS', '4096'))
+allowed_tools = json.loads(os.environ.get('CLAUDE_ALLOWED_TOOLS', '["Read", "Grep", "Glob", "Write", "Edit", "MultiEdit", "Delete", "Bash", "run", "WebSearch", "WebFetch"]'))
+
+# Parse system_prompt from environment (JSON string, string, or use default)
+system_prompt_str = os.environ.get('CLAUDE_SYSTEM_PROMPT')
+if system_prompt_str:
+    try:
+        system_prompt = json.loads(system_prompt_str)
+    except json.JSONDecodeError:
+        # If it's not valid JSON, treat it as a plain string
+        system_prompt = system_prompt_str
+else:
+    # Default to Claude Code preset
+    system_prompt = {"type": "preset", "preset": "claude_code"}
+
+# Parse MCP servers from environment
+mcp_servers_str = os.environ.get('CLAUDE_MCP_SERVERS', '{}')
+try:
+    mcp_servers = json.loads(mcp_servers_str)
+except json.JSONDecodeError:
+    print(f"[Warning] Failed to parse CLAUDE_MCP_SERVERS, using empty dict")
+    mcp_servers = {}
+
+async def run():
+    # Debug: print environment variables
+    print(f"[Debug] Environment variables:")
+    for key in ['ANTHROPIC_API_KEY', 'CLAUDE_CODE_USE_BEDROCK', 'CLAUDE_CODE_OAUTH_TOKEN', 'AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_REGION_NAME', 'AWS_SESSION_TOKEN']:
+        value = os.environ.get(key)
+        if value:
+            print(f"[Debug] {key}: Set")
+        else:
+            print(f"[Debug] {key}: ")
+
+    print(f"[Debug] Model: {model}")
+
+    # Check if max_thinking_tokens is supported by inspecting the constructor
+    import inspect
+    options_dict = {
+        'model': model,
+        'cwd': cwd,
+        'add_dirs': add_dirs,
+        'permission_mode': permission_mode,
+        'system_prompt': system_prompt,
+        'allowed_tools': allowed_tools,
+    }
+
+    # Add MCP servers if configured
+    if mcp_servers:
+        options_dict['mcp_servers'] = mcp_servers
+        print(f"[Debug] Using MCP servers: {list(mcp_servers.keys())}")
+
+    try:
+        sig = inspect.signature(ClaudeAgentOptions.__init__)
+        if 'max_thinking_tokens' in sig.parameters:
+            options_dict['max_thinking_tokens'] = max_tokens
+            print(f"[Debug] Using max_thinking_tokens: {max_tokens}")
+        else:
+            print(f"[Debug] max_thinking_tokens not supported by this SDK version")
+    except Exception as e:
+        print(f"[Debug] Error checking ClaudeAgentOptions signature: {e}")
+
+    options = ClaudeAgentOptions(**options_dict)
+
+    async with ClaudeSDKClient(options=options) as client:
+        # Note: MCP tools are loaded internally by the SDK.
+        # The MCP server process will output its own logs showing which tools loaded successfully.
+        # Look for ToolUniverse log messages like "Exposing X tools" in the output.
+        if mcp_servers:
+            print(f"[Debug] MCP servers initialized.")
+
+        await client.query(user_prompt)
+
+        messages = []
+        async for message in client.receive_response():
+            messages.append(message)
+            # Debug: print message content
+            if hasattr(message, 'content'):
+                for block in message.content:
+                    if hasattr(block, 'text'):
+                        print(f"[Claude] {block.text}")
+
+        last = messages[-1]
+        # print(f"[Debug] Last message type: {type(last)}")
+        # print(f"[Debug] Last message has is_error: {hasattr(last, 'is_error')}")
+        # if hasattr(last, 'is_error'):
+        #     print(f"[Debug] Last message is_error: {last.is_error}")
+
+        if not hasattr(last, 'is_error'):
+            with open('messages.pkl', 'wb') as f:
+                pickle.dump(messages, f)
+            raise RuntimeError('Claude Agent did not return a valid ResultMessage')
+
+        if last.is_error:
+            with open('messages_error.pkl', 'wb') as f:
+                pickle.dump(messages, f)
+            # Try to extract error details
+            error_msg = "Claude Agent returned an error"
+            try:
+                if hasattr(last, 'content') and last.content:
+                    if hasattr(last.content[-1], 'text'):
+                        error_msg = f"Claude Agent error: {last.content[-1].text}"
+                    elif hasattr(last.content[-1], 'error'):
+                        error_msg = f"Claude Agent error: {last.content[-1].error}"
+            except:
+                pass
+            raise RuntimeError(error_msg)
+
+        # Extract token usage from ResultMessage (last message)
+        token_usage = {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "total_tokens": 0,
+            "cost": 0.0,
+            "model": model,
+            "model_name": model_name
+        }
+
+        if hasattr(last, 'usage') and last.usage:
+            usage = last.usage
+            token_usage['input_tokens'] = usage.get('input_tokens', 0)
+            token_usage['output_tokens'] = usage.get('output_tokens', 0)
+            token_usage['cache_creation_input_tokens'] = usage.get('cache_creation_input_tokens', 0)
+            token_usage['cache_read_input_tokens'] = usage.get('cache_read_input_tokens', 0)
+            token_usage["total_tokens"] = (
+                token_usage["input_tokens"] +
+                token_usage["output_tokens"] +
+                token_usage["cache_creation_input_tokens"] +
+                token_usage["cache_read_input_tokens"]
+            )
+        else:
+            print("[Warning] ResultMessage does not contain usage information")
+
+        # Extract cost from ResultMessage
+        if hasattr(last, 'total_cost_usd'):
+            token_usage["cost"] = last.total_cost_usd
+        else:
+            print("[Warning] ResultMessage does not contain total_cost_usd")
+
+        # Write token usage to file in working directory
+        usage_file_path = os.path.join(cwd, 'claude_code_usage.json')
+        try:
+            with open(usage_file_path, 'w') as f:
+                json.dump(token_usage, f, indent=2)
+            # print(f"[Debug] Token usage written to {usage_file_path}")
+            # print(f"[Debug] Token usage: {token_usage}")
+        except Exception as e:
+            print(f"[Warning] Failed to write token usage: {e}")
+
+asyncio.run(run())
+
+# Fix file ownership: files created by root inside Docker can't be read by the host user.
+# HOST_UID/HOST_GID are passed from the host so we can restore proper ownership.
+host_uid = os.environ.get('HOST_UID')
+host_gid = os.environ.get('HOST_GID')
+if host_uid and host_gid:
+    import subprocess
+    try:
+        subprocess.run(['chown', '-R', f'{host_uid}:{host_gid}', '/workspace'], check=True)
+    except Exception as e:
+        print(f"[Warning] Failed to chown workspace: {e}")

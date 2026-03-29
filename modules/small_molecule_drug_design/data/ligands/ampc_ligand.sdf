@@ -1,0 +1,87 @@
+STC
+  ModelServer 0.9.12
+
+ 19 20  0  0  0  0  0  0  0  0  0
+   23.9580    4.3210   13.8760 N   0  0  0  0  0  0  0  0  0  0  0  0
+   22.7830    4.6990   13.2060 C   0  0  0  0  0  0  0  0  0  0  0  0
+   21.7520    5.3460   13.9220 C   0  0  0  0  0  0  0  0  0  0  0  0
+   22.6370    4.4260   11.8220 C   0  0  0  0  0  0  0  0  0  0  0  0
+   20.5620    5.7140   13.2600 C   0  0  0  0  0  0  0  0  0  0  0  0
+   21.4460    4.7960   11.1610 C   0  0  0  0  0  0  0  0  0  0  0  0
+   20.4110    5.4330   11.8830 C   0  0  0  0  0  0  0  0  0  0  0  0
+   18.9380    5.8670   11.0820 CL  0  0  0  0  0  0  0  0  0  0  0  0
+   25.2760    5.4300   13.8970 S   0  0  0  0  0  0  0  0  0  0  0  0
+   25.0170    6.7010   15.2220 C   0  0  0  0  0  0  0  0  0  0  0  0
+   26.4830    4.6860   14.1520 O   0  0  0  0  0  0  0  0  0  0  0  0
+   25.3670    6.0870   12.6250 O   0  0  0  0  0  0  0  0  0  0  0  0
+   24.7470    6.4870   16.5870 C   0  0  0  0  0  0  0  0  0  0  0  0
+   25.0600    8.0870   15.0100 C   0  0  0  0  0  0  0  0  0  0  0  0
+   24.6290    7.7630   17.2160 S   0  0  0  0  0  0  0  0  0  0  0  0
+   24.6010    5.1790   17.2960 C   0  0  0  0  0  0  0  0  0  0  0  0
+   24.8220    8.7390   16.2240 C   0  0  0  0  0  0  0  0  0  0  0  0
+   24.7180    4.0210   16.6520 O   0  0  0  0  0  0  0  0  0  0  0  0
+   24.3710    5.1850   18.4900 O   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  1  0  0  0  0
+  1  9  1  0  0  0  0
+  2  3  2  0  0  0  0
+  2  4  1  0  0  0  0
+  3  5  1  0  0  0  0
+  4  6  2  0  0  0  0
+  5  7  2  0  0  0  0
+  6  7  1  0  0  0  0
+  7  8  1  0  0  0  0
+  9 10  1  0  0  0  0
+  9 11  2  0  0  0  0
+  9 12  2  0  0  0  0
+ 10 13  2  0  0  0  0
+ 10 14  1  0  0  0  0
+ 13 15  1  0  0  0  0
+ 13 16  1  0  0  0  0
+ 14 17  2  0  0  0  0
+ 15 17  1  0  0  0  0
+ 16 18  1  0  0  0  0
+ 16 19  2  0  0  0  0
+M  END
+> <model_server_result.job_id>
+gi5yA2kG9fcdMzpH59D2XA
+
+> <model_server_result.datetime_utc>
+2025-08-29 17:28:06
+
+> <model_server_result.server_version>
+0.9.12
+
+> <model_server_result.query_name>
+ligand
+
+> <model_server_result.source_id>
+pdb-bcif
+
+> <model_server_result.entry_id>
+1l2s
+
+> <model_server_params.name>
+atom_site
+
+> <model_server_params.value>
+{"label_asym_id":"C","auth_seq_id":1115}
+
+> <model_server_stats.io_time_ms>
+9
+
+> <model_server_stats.parse_time_ms>
+13
+
+> <model_server_stats.create_model_time_ms>
+28
+
+> <model_server_stats.query_time_ms>
+293
+
+> <model_server_stats.encode_time_ms>
+0
+
+> <model_server_stats.element_count>
+19
+
+$$$$

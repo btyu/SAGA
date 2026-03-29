@@ -1,0 +1,34 @@
+from typing import List, Optional, Dict, Any, Tuple, Set
+from loguru import logger
+
+from .scorer_utils import BaseScorer, scorer
+
+
+class Scorer(BaseScorer):
+
+    def __init__(self):
+        # Call parent constructor to set up registry
+        super().__init__()
+
+        # If needed, load and initialize any resources (e.g., models, data) here
+        # so that they can be used directly
+        pass
+
+    @scorer(
+        name="<name>",
+        type="<type>",
+        description="<description>",
+    )
+    def <name>(self, samples: List[<sample_schema>]) -> <output_schema>:
+        """
+        <a detailed description of the function>
+
+        Args:
+            samples: <input_description>
+        
+        Returns:
+            <output_description>
+        """
+        
+        # Your code here
+

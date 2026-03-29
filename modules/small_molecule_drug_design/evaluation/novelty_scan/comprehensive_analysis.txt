@@ -1,0 +1,20 @@
+COMPREHENSIVE ANTIBIOTICS DATABASE ANALYSIS
+==================================================
+
+Total compounds: 685
+Unique SMILES: 685
+Sources: {'existing_file': 516, 'original': 90, 'extended': 79}
+Classes: {'existing_antibiotic': 516, 'other': 69, 'cephalosporin': 11, 'fluoroquinolone': 11, 'sulfonamide': 7, 'aminoglycoside': 7, 'macrolide': 5, 'penicillinase-resistant penicillin': 4, 'carbapenem': 4, 'nitroimidazole': 4, 'tetracycline': 4, 'penicillin': 3, 'beta-lactamase inhibitor': 3, 'nitrofuran': 3, 'rifamycin': 3, 'lipoglycopeptide': 3, 'lincosamide': 2, 'pleuromutilin': 2, 'amphenicol': 2, 'glycopeptide': 2, 'oxazolidinone': 2, 'aminopenicillin': 2, 'ureidopenicillin': 1, 'carboxypenicillin': 1, 'beta-lactamase inhibitor (non-beta-lactam)': 1, 'aminocyclitol': 1, 'steroid antibiotic': 1, 'phosphonic acid antibiotic': 1, 'pseudomonic acid': 1, 'quinolone ancestor': 1, 'monobactam': 1, 'glycylcycline': 1, 'dihydrofolate reductase inhibitor': 1, 'polymyxin': 1, 'aminomethylcycline': 1, 'lipopeptide': 1, 'fluorocycline': 1, 'cephamycin': 1}
+
+MOLECULAR PROPERTIES
+--------------------
+molecular_weight: mean=685.92, std=411.22, min=34.01, max=2267.18
+logp: mean=0.84, std=4.41, min=-25.87, max=11.34
+tpsa: mean=227.25, std=161.14, min=0.00, max=909.34
+hbd: mean=6.88, std=6.40, min=0.00, max=36.00
+hba: mean=12.13, std=7.21, min=0.00, max=42.00
+rotatable_bonds: mean=8.60, std=7.57, min=0.00, max=60.00
+aromatic_rings: mean=1.71, std=2.17, min=0.00, max=10.00
+heavy_atoms: mean=47.69, std=29.27, min=1.00, max=161.00
+
+Lipinski's Rule violations: 450/685 (65.7%)

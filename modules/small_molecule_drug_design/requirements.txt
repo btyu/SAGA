@@ -1,0 +1,28 @@
+biopython
+rdkit
+
+# unidock requirements
+unidock_tools @ git+https://github.com/dptech-corp/Uni-Dock.git@1.1.2#subdirectory=unidock_tools
+
+numpy==1.24.4
+scipy
+contourpy
+openmm
+pandas==2.0.3
+packaging==23.2
+
+# chemprop models 
+chemprop==1.6.1
+torch
+lightning
+
+# rdkit 2D descriptors support
+descriptastorus @ git+https://github.com/bp-kelley/descriptastorus
+
+# RAscore requirements
+scikit-learn
+xgboost==1.0.2
+
+# analysis requirements
+umap-learn
+plip

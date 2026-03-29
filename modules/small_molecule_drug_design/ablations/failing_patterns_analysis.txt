@@ -1,0 +1,214 @@
+<frozen importlib._bootstrap>:241: RuntimeWarning: to-Python converter for boost::shared_ptr<RDKit::FilterHierarchyMatcher> already registered; second conversion method ignored.
+[22:27:06] CC(=NOC(C)=C1CC(=O)N(CC=2C=CC=CC2)C3=NC(=
+[22:27:06] ~~^
+[22:27:06] NC1=CC(=NN1)C(F)(F)F)C2=CC(=CN2)N3CCNCC3
+[22:27:06] ~~~~~~~~~~~~~~~~~~~~^
+Total molecules: 100
+Failing antibiotics_motifs_filter: 65
+
+Analyzing which SMARTS rule each failing SMILES matched...
+
+================================================================================
+SUMMARY: Which SMARTS rules are causing failures
+================================================================================
+  KEPT (should not be here!): 58 molecules
+  motif:diaminopyrimidine: 7 molecules
+
+================================================================================
+DETAILED BREAKDOWN: Each failing SMILES and its matched pattern(s)
+================================================================================
+
+1. SMILES: NC1=C(Cl)C=NC(N[C@@H]2CC(Cn3cc(C(=O)O)nn3)C[C@H]2CN)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+2. SMILES: Nc1nc(Cl)nc(N[C@@H]2CC(c3c(N)cnc(N)n3)C(O)[C@H]2O)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+3. SMILES: NC1=C(F)C=NC(N[C@@H]2CC(Cn3cc(C(=O)N)nn3)C(O)[C@H]2CN)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+4. SMILES: NC1=C(Cl)C=NC(N[C@@H]2CC(Cn3cnnc3)C(O)[C@H]2CN)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+5. SMILES: Nc1c(Cl)cnc(N[C@@H]2CC(c3cnc(=O)[nH]c3)C(O)[C@H]2O)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+6. SMILES: Nc1c(F)cnc(N[C@@H]2CC(c3sc(cn3)C(=O)N)C[C@H]2CN)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+7. SMILES: Nc1nc(Cl)nc(N[C@@H]2CC(Cn3cnc(C(=O)Nc4c(F)nc(N)nc4N)n3)C[C@H]2CN)n1
+   Matched pattern(s): motif:diaminopyrimidine
+
+8. SMILES: Nc1c(F)cnc(N[C@@H]2CC(c3cnc(=O)[nH]c3)C(O)C2)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+9. SMILES: NC1=C(Cl)C=NC(N[C@@H]2CC(CN3C=CC(=O)NC3=O)C(O)[C@H]2O)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+10. SMILES: Nc1c(F)cnc(N[C@@H]2CC(Cn3cnnc3)C[C@H]2CN)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+11. SMILES: Nc1c(F)cnc(N[C@@H]2CC(CN3C=CC(=O)NC3=O)C(O)C2)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+12. SMILES: Nc1c(F)cnc(N[C@@H]2CC(Cn3cc(C(=O)O)nn3)C(=O)[C@H]2CN)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+13. SMILES: NC1=NC(N)=NC(N[C@@H]2CC(c3c(N)cnc(N)n3)C(=O)[C@H]2CO)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+14. SMILES: NC1=NC(Cl)=NC(N[C@@H]2CC(c3c(N)c(F)nc(N)n3)C[C@H]2O)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+15. SMILES: Nc1c(Cl)cnc(N[C@@H]2CC(Cc3sc(C(=O)N)cn3)C[C@H]2CN)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+16. SMILES: Cc1c(NC(=O)Nc2c(F)nc(N)nc2N)cc(CN3C=NC=N3)cc1NC(=O)c1ccccc1
+   Matched pattern(s): motif:diaminopyrimidine
+
+17. SMILES: NC1=NC(N[C@@H]2CC(Cn3cnnc3)C[C@H]2CN)=NC(Cl)=C1
+   Matched pattern(s): KEPT (should not be here!)
+
+18. SMILES: Nc1c(F)cnc(N[C@@H]2CC(c3nc(N)nc(Cl)n3)C(O)C2)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+19. SMILES: NC1=C(F)C(F)=NC(N[C@@H]2CC(Cn3cc(C(=O)O)nn3)C[C@H]2O)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+20. SMILES: NC1=C(Cl)C=NC(N[C@@H]2CC(CN3C=NC=N3)C(=O)[C@H]2CN)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+21. SMILES: Nc1c(Cl)cnc(N[C@@H]2CC(Cn3cc(C(=O)NCc4ccccc4C(C)C(=O)O)nn3)C(O)[C@H]2O)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+22. SMILES: Nc1nc(F)nc(N[C@@H]2CC(c3c(N)cnc(N)n3)C(O)[C@H]2CN)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+23. SMILES: NC1=C(Cl)C=NC(N[C@@H]2CC(Cn3cnnc3)C[C@H]2CN(C)C(=O)N)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+24. SMILES: NC1=C(Cl)C=NC(N[C@@H]2CC(c3cn(C)nc3)C(=O)[C@H]2CN)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+25. SMILES: NC1=C(Cl)C=NC(N[C@@H]2CC(Cn3cc(C(=O)NO)cn3)C(O)C2)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+26. SMILES: NC1=C(Cl)C=NC(N[C@@H]2CC(CN3C=CC(=O)N=C3)C(O)C2)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+27. SMILES: Nc1nc(N[C@@H]2CC(c3c(N)c(F)nc(N)n3)C(O)[C@H]2CO)nc(N)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+28. SMILES: Nc1c(F)cnc(N[C@@H]2CC(c3c(N)c(Cl)nc(N)n3)C[C@H]2O)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+29. SMILES: NC1=C(Cl)C=NC(N[C@@H]2CC(Cn3cc(C(=O)N)nn3)C[C@H]2CN(C)C(=O)c4cc(F)ccc4)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+30. SMILES: Nc1nc(Cl)nc(N[C@@H]2CC(c3c(N)c(Cl)nc(N)n3)C[C@H]2N)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+31. SMILES: NC1=C(Cl)C=NC(N[C@@H]2CC(Cn3cnnc3)C(=O)[C@H]2CN(CCN))=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+32. SMILES: NC1=C(F)C=NC(N[C@@H]2CC(Cn3cc(C)nn3)C(=O)[C@H]2OC(=O)N)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+33. SMILES: Nc1c(Cl)cnc(N[C@@H]2CC(Cn3c(N)nc(N)n3)C[C@H]2CN)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+34. SMILES: NC1=C(Cl)C=NC(N[C@@H]2CC(Cn3cnnc3)C[C@H]2OCc4ccccc4)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+35. SMILES: NC1=C(F)C=NC(N[C@@H]2CC(Cn3cc(C(=O)N)nn3)C[C@H]2CNc4nccnc4)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+36. SMILES: Nc1c(F)cnc(N[C@@H]2CC(c3c(N)c(F)nc(N)n3)C(O)[C@H]2O)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+37. SMILES: CC(=O)N[C@H]1CC(CN2C=C(C(=O)N=C2)Cl)C[C@H]1O
+   Matched pattern(s): KEPT (should not be here!)
+
+38. SMILES: NC1=C(Cl)C=NC(N[C@@H]2CC(Cn3cnnc3)C(F)C2)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+39. SMILES: Nc1nc(Cl)nc(N[C@@H]2CC(c3c(N)c(Cl)nc(N)n3)C(F)[C@H]2CN)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+40. SMILES: CC(c1c(N)cnc(N)n1)C1CC(Nc2nc(Cl)nc(N)n2)C(=O)N1
+   Matched pattern(s): KEPT (should not be here!)
+
+41. SMILES: NC1=C(Cl)C=NC(N[C@@H]2CC(c3c[nH]c(=O)[nH]c3=O)C(F)[C@H]2O)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+42. SMILES: CC(C)C1CC(CN2C=NC=N2)CC(NC(=O)Nc3c(F)nc(N)nc3N)C1OC(=O)NCC(C)C
+   Matched pattern(s): motif:diaminopyrimidine
+
+43. SMILES: Nc1c(Cl)cnc(N[C@@H]2CC(Cn3cc(C)nn3)C(O)[C@H]2O)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+44. SMILES: Nc1c(F)cnc(N[C@@H]2CC(Cn3ccnc3)C(F)[C@H]2O)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+45. SMILES: NC1=C(Cl)C=NC(N[C@@H]2CC(c3c(N)c(Cl)nc(N)n3)C(O)[C@H]2CN)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+46. SMILES: Nc1nc(Cl)nc(N[C@@H]2CC(c3c(N)cnc(N)n3)C(=O)[C@H]2NC(=O)N)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+47. SMILES: NC1=NC(F)=NC(N[C@@H]2CC(c3c(N)c(Cl)nc(N)n3)C(O)[C@H]2O)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+48. SMILES: Nc1c(Cl)cnc(N[C@@H]2CC(Cn3cc(C(=O)N)nn3)C[C@H]2OCc4c(F)nc(N)nc4N)n1
+   Matched pattern(s): motif:diaminopyrimidine
+
+49. SMILES: NC1=NC(F)=NC(N[C@@H]2CC(c3c(N)nc(N)nc3N)C[C@H]2CN)=N1
+   Matched pattern(s): motif:diaminopyrimidine
+
+50. SMILES: Nc1c(Cl)cnc(N[C@@H]2CC(c3c(N)cnc(N)n3)C(=O)[C@H]2O)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+51. SMILES: CC(c1cnc(N)nc1N)C(=O)N[C@@H]2CC(Cn3cc(C(=O)O)nn3)C[C@H]2CN
+   Matched pattern(s): motif:diaminopyrimidine
+
+52. SMILES: Nc1c(Cl)cnc(N[C@@H]2CC(Cn3cnnc3)C(NC(=O)Nc4c(F)nc(C)c(Cl)n4)[C@H]2O)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+53. SMILES: NC1=C(F)C=NC(N[C@@H]2CC(c3c(N)cnc(N)n3)C(O)[C@H]2CN(CC(=O)N4CCOCC4))=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+54. SMILES: NC1=C(F)C=NC(N[C@@H]2CC(Cn3cnnc3)C(=O)[C@H]2O)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+55. SMILES: NC1=C(Cl)C=NC(N[C@@H]2CC(c3c(N)cnc(N)n3)C[C@H]2CN)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+56. SMILES: CC(=O)NC1=C(Cl)C=NC(N[C@@H]2CC(CN3C=CN=N3)C[C@H]2CN)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+57. SMILES: Nc1nc(N)nc(N[C@@H]2CC(CN3C=NC=N3)CC(NC(=O)Nc4c(F)nc(N)nc4N)C2)n1
+   Matched pattern(s): motif:diaminopyrimidine
+
+58. SMILES: Nc1nc(NC[C@@H]2CC(c3c(N)cnc(NC(=O)N)n3)C(O)[C@H]2CO)nc(N)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+59. SMILES: Nc1c(F)cnc(N[C@@H]2CC(c3c(N)nc(N)nn3)C(=O)[C@H]2OC(=O)N)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+60. SMILES: NC1=C(Cl)C=NC(N[C@@H]2CC(CN3C=CN=N3)C[C@H]2O)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+61. SMILES: Nc1c(Cl)cnc(N[C@@H]2CC(Cn3cc(C(=O)O)nn3)C(O)[C@H]2CN(C)C(=O)CC(C)C)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+62. SMILES: NC1=NC(N)=NC(N[C@@H]2CC(c3c(N)c(F)nc(N)n3)C(=O)[C@H]2O)=N1
+   Matched pattern(s): KEPT (should not be here!)
+
+63. SMILES: Nc1c(F)cnc(N[C@@H]2CC(Cn3nc(CCNC(=O)C)nn3)C(=O)[C@H]2CN)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+64. SMILES: Nc1nc(Cl)nc(N[C@@H]2CC(c3c(N)cnc(NC(N)=O)n3)C[C@H]2CN)n1
+   Matched pattern(s): KEPT (should not be here!)
+
+65. SMILES: Nc1c(F)cnc(N[C@@H]2CC(c3cnn(c3)C(=O)NCc4ccccc4)C(O)[C@H]2CN)n1
+   Matched pattern(s): KEPT (should not be here!)

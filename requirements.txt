@@ -1,0 +1,30 @@
+# Common dependencies
+litellm>=1.76.0
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+python-dotenv>=1.0.0
+typing-extensions>=4.0.0
+PyYAML>=6.0.0
+packaging>=21.0
+pandas>=2.3.1
+numpy>=1.21.0,<2.0.0
+scipy>=1.15.3
+torch>=2.6.0
+transformers>=4.53.2
+jupyter>=1.1.1
+notebook>=7.4.4
+ipywidgets>=8.0.0
+jupyter-ui-poll>=1.0.0
+docker==7.1.0
+claude-code-sdk==0.0.20
+claude-agent-sdk==0.1.6
+mcp[cli]>=1.13.1
+boto3>=1.36.0
+
+# Molecular optimization dependencies
+rdkit>=2023.9.1
+rdchiral>=1.1.0
+
+# DNA design dependencies
+loguru>=0.7.0
+grelu==1.0.4.post1.dev0

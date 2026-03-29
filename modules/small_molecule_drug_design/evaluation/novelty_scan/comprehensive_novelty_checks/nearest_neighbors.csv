@@ -1,0 +1,31 @@
+name,class,smiles,tanimoto_to_query,match_strict,match_general
+oxacillin,penicillinase-resistant penicillin,Cc1onc(-c2ccccc2)c1C(O)=N[C@@H]1C(=O)N2[C@@H]1SC(C)(C)[C@@H]2C(=O)O,0.19444444444444445,False,False
+antibiotic_549,existing_antibiotic,Cc1onc(-c2ccccc2)c1C(=O)N[C@@H]1C(=O)N2[C@@H](C(=O)O)C(C)(C)S[C@H]12,0.1780821917808219,False,False
+antibiotic_144,existing_antibiotic,CC1OC2OC(=O)OC2C2=C1C(=O)c1c(O)cccc1C2=O,0.16129032258064516,False,False
+antibiotic_486,existing_antibiotic,Oc1ccccc1,0.15789473684210525,False,False
+dicloxacillin,penicillinase-resistant penicillin,Cc1onc(-c2c(Cl)cccc2Cl)c1C(O)=N[C@@H]1C(=O)N2[C@@H]1SC(C)(C)[C@@H]2C(=O)O,0.15584415584415584,False,False
+cloxacillin,penicillinase-resistant penicillin,Cc1onc(-c2ccccc2Cl)c1C(O)=N[C@@H]1C(=O)N2[C@@H]1SC(C)(C)[C@@H]2C(=O)O,0.1518987341772152,False,False
+nalidixic acid,quinolone ancestor,CCn1cc(C(=O)O)c(=O)c2ccc(C)nc21,0.15,False,False
+antibiotic_468,existing_antibiotic,Cc1ccc(S(=O)(=O)NCl)cc1,0.14893617021276595,False,False
+flucloxacillin,penicillinase-resistant penicillin,Cc1onc(-c2c(F)cccc2Cl)c1C(O)=N[C@@H]1C(=O)N2[C@@H]1SC(C)(C)[C@@H]2C(=O)O,0.14634146341463414,False,False
+antibiotic_217,existing_antibiotic,CNc1ncc(-c2ccc3c(=O)c(C(=O)O)cn(C4CC4)c3c2C)cc1C,0.14473684210526316,False,False
+antibiotic_386,existing_antibiotic,O=c1ccn(F)c2ccccc12,0.14285714285714285,False,False
+antibiotic_534,existing_antibiotic,CC1=C(C(=O)O)N2C(=O)[C@@H](NC(=O)[C@H](N)c3ccccc3)[C@H]2SC1,0.14285714285714285,False,False
+cephalexin,cephalosporin,CC1=C(C(=O)O)N2C(=O)[C@@H](N=C(O)[C@H](N)c3ccccc3)[C@H]2SC1,0.14285714285714285,False,False
+antibiotic_539,existing_antibiotic,Cc1onc(-c2c(Cl)cccc2Cl)c1C(=O)N[C@@H]1C(=O)N2[C@@H](C(=O)O)C(C)(C)S[C@H]12,0.14102564102564102,False,False
+antibiotic_281,existing_antibiotic,CN(C)[C@@H]1C(O)=C(C(N)=O)C(=O)[C@@]2(O)C(O)=C3C(=O)c4c(O)cccc4[C@@](C)(O)[C@H]3[C@H](O)[C@@H]12,0.14102564102564102,False,False
+sulfamethoxazole,sulfonamide,Cc1cc(NS(=O)(=O)c2ccc(N)cc2)no1,0.14035087719298245,False,False
+antibiotic_464,existing_antibiotic,CC(=O)Oc1cccc(C)c1,0.14,False,False
+antibiotic_376,existing_antibiotic,CN(C)[C@@H]1C(O)=C(C(N)=O)C(=O)[C@@]2(O)C(O)=C3C(=O)c4c(O)cccc4[C@@](C)(O)[C@H]3[C@H](O)[C@@H]12.Cl,0.13924050632911392,False,False
+antibiotic_446,existing_antibiotic,Cc1ncc([N+](=O)[O-])n1CCOC(c1ccccc1)c1cc(Cl)cc(Cl)c1,0.1388888888888889,False,False
+sulfisoxazole,sulfonamide,Cc1noc(NS(=O)(=O)c2ccc(N)cc2)c1C,0.13793103448275862,False,False
+sulfacetamide,sulfonamide,CC(O)=NS(=O)(=O)c1ccc(N)cc1,0.13725490196078433,False,False
+antibiotic_467,existing_antibiotic,Cc1cccc(O)c1,0.13636363636363635,False,False
+antibiotic_177,existing_antibiotic,C[C@H]1c2cccc([O-])c2C(=O)C2=C(O)[C@]3(O)C(=O)C(C(N)=O)=C(O)[C@@H](N(C)C)[C@@H]3[C@@H](O)[C@@H]21.C[C@H]1c2cccc([O-])c2C(=O)C2=C(O)[C@]3(O)C(=O)C(C(N)=O)=C(O)[C@@H](N(C)C)[C@@H]3[C@@H](O)[C@@H]21.[Ca+2],0.13580246913580246,False,False
+antibiotic_311,existing_antibiotic,CN(C)[C@@H]1C([O-])=C(C(N)=O)C(=O)[C@@]2(O)C(O)=C3C(=O)c4c(O)cccc4[C@@](C)(O)[C@H]3[C@H](O)[C@@H]12.CN(C)[C@@H]1C([O-])=C(C(N)=O)C(=O)[C@@]2(O)C(O)=C3C(=O)c4c(O)cccc4[C@@](C)(O)[C@H]3[C@H](O)[C@@H]12.[Ca+2],0.13580246913580246,False,False
+antibiotic_475,existing_antibiotic,CCCCCCCCCCCCC[N+](C)(C)Cc1ccccc1,0.1346153846153846,False,False
+antibiotic_441,existing_antibiotic,Cc1ncc([N+](=O)[O-])n1CCCOC(c1ccccc1)c1ccccc1,0.13432835820895522,False,False
+antibiotic_374,existing_antibiotic,CC1(C)S[C@@H]2[C@H](NC(=O)Cc3ccccc3)C(=O)N2[C@H]1C(=O)O,0.13432835820895522,False,False
+penicillin,penicillin,CC1(C)SC2C(N=C(O)Cc3ccccc3)C(=O)N2C1C(=O)O,0.13432835820895522,False,False
+penicillin G,penicillin,CC1(C)S[C@@H]2[C@H](N=C(O)Cc3ccccc3)C(=O)N2[C@H]1C(=O)O,0.13432835820895522,False,False
+antibiotic_469,existing_antibiotic,Nc1c2ccccc2nc2ccccc12,0.13333333333333333,False,False
