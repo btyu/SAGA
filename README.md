@@ -1,5 +1,7 @@
 # SAGA: Scientific Agentic framework for Goal-oriented discovery with Adaptive objectives
 
+![SAGA Framework](assets/saga_framework.png)
+
 SAGA is a generalist agentic framework for scientific discovery that automates the iterative process of objective design and hypothesis optimization. Rather than assuming a fixed set of objectives is known upfront, SAGA dynamically discovers and refines optimization objectives through a bi-level procedure: an **outer loop** that plans and evolves objectives, and an **inner loop** that optimizes candidate hypotheses against those objectives.
 
 The framework comprises four core agentic modules:
@@ -142,3 +144,18 @@ python exp_kp_drug.py --level 3
 ```
 
 Run logs and results will be saved automatically to the `runs/` directory.
+
+---
+
+## Citation
+
+If you use SAGA in your research, please cite our paper:
+
+```bibtex
+@article{du2025saga,
+  title={Accelerating Scientific Discovery with Autonomous Goal-evolving Agents},
+  author={Du, Yuanqi and Yu, Botao and Liu, Tianyu and Shen, Tony and Chen, Junwu and Rittig, Jan G. and Sun, Kunyang and Zhang, Yikun and Krishnan, Aarti and Zhang, Yu and Rosen, Daniel and Pirone, Rosali and Song, Zhangde and Zhou, Bo and Masschelein, Cassandra and Wang, Yingze and Wang, Haorui and Jia, Haojun and Zhang, Chao and Zhao, Hongyu and Ester, Martin and Hacohen, Nir and Head-Gordon, Teresa and Gomes, Carla P. and Sun, Huan and Duan, Chenru and Schwaller, Philippe and Jin, Wengong},
+  journal={arXiv preprint arXiv:2512.21782},
+  year={2025}
+}
+```
