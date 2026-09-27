@@ -1,5 +1,7 @@
 # SAGA: Scientific Agentic framework for Goal-oriented discovery with Adaptive objectives
 
+[![DOI](https://zenodo.org/badge/1191952421.svg)](https://doi.org/10.5281/zenodo.22985353)
+
 ![SAGA Framework](assets/saga_framework.png)
 
 SAGA is a generalist agentic framework for scientific discovery that automates the iterative process of objective design and hypothesis optimization. Rather than assuming a fixed set of objectives is known upfront, SAGA dynamically discovers and refines optimization objectives through a bi-level procedure: an **outer loop** that plans and evolves objectives, and an **inner loop** that optimizes candidate hypotheses against those objectives.
